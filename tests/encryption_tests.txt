@@ -1,0 +1,24 @@
+=== 1. Encrypt the sample file ===
+Encrypted sample_data/students_sample.csv -> sample_data/students_sample.enc
+SHA-256 (original): 8bdf7b0dd93397d07317f740762e9b39eabc1554554fccb1f95dc297a00565fd
+
+=== 2. Decrypt and verify it matches the original ===
+VERIFY: MATCH - decrypted file equals original
+
+=== 3. Integrity check on the unchanged file (expect OK) ===
+INTEGRITY OK: file unchanged
+
+=== 4. Change a copy of the file, then check (expect FAIL) ===
+Baseline stored. SHA-256: 8bdf7b0dd93397d07317f740762e9b39eabc1554554fccb1f95dc297a00565fd
+INTEGRITY FAIL: file was modified
+  expected 8bdf7b0dd93397d07317f740762e9b39eabc1554554fccb1f95dc297a00565fd
+  actual   d97ef5735c0a10c0198ed84c52cf67949e75f8594c08537029c72341de25ce2a
+
+=== 5. Missing file (expect clean error) ===
+ERROR: File not found: missing.csv
+
+=== 6. Decrypt a file that is not encrypted (expect clean error) ===
+ERROR: Decryption failed: wrong key, or not an encrypted file, or file was changed.
+
+=== 7. Empty file (expect clean error) ===
+ERROR: File is empty: tests/empty.txt
