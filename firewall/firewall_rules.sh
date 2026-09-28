@@ -3,10 +3,10 @@
 # Run as root, ONLY in the authorised laboratory.
 
 # ---- EDIT THESE VALUES WITH THE ONES GIVEN IN THE LAB ----
-SERVER_IP="CHANGE_ME"     # student records server
-GUEST_NET="CHANGE_ME"     # guest network, e.g. 192.168.20.0/24
-STAFF_NET="CHANGE_ME"     # authorised staff network, e.g. 192.168.10.0/24
-PORT="CHANGE_ME"          # service port given by the assessor
+SERVER_IP="10.0.10.1"     # student records server
+GUEST_NET="10.0.20.0/24"     # guest network, e.g. 192.168.20.0/24
+STAFF_NET="10.0.10.0/24"     # authorised staff network, e.g. 192.168.10.0/24
+PORT="8080"          # service port given by the assessor
 PROTO="tcp"
 ADMIN_IP=""               # optional: your own host, keeps SSH open so you are not locked out
 MODE="server"             # server = run on the records server; gateway = run on the router

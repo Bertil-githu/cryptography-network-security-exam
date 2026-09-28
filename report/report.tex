@@ -55,7 +55,7 @@ The rules use \texttt{iptables}. Order matters: the guest network is dropped fir
 \lstinputlisting[language=bash]{../firewall/firewall_rules.sh}
 
 \subsection{Test procedure and results}
-One permitted connection and two blocked connections were tested with \texttt{nc -zv -w 3 SERVER PORT} from a staff host, a guest host and a third host. The commands, expected outcomes and actual results are below.
+The tests ran in a virtual laboratory on the laptop (Linux network namespaces with a server and three clients: staff, guest and other), approved by the lecturer. One permitted connection and two blocked connections were tested with \texttt{nc -zv -w 3 SERVER PORT} from a staff host, a guest host and a third host. The commands, expected outcomes and actual results are below.
 \lstinputlisting{../filter_tests.md}
 
 \section{Conclusion}
