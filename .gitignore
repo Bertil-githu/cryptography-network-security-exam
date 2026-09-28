@@ -1,0 +1,7 @@
+*.key
+.exam_keys/
+__pycache__/
+venv/
+*.aux
+*.log
+*.out
