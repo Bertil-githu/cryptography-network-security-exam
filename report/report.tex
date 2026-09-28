@@ -1,0 +1,65 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings,booktabs,hyperref,longtable,array}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible}
+\title{Cryptography and Network Security\\Integrated Situation Report}
+\author{YOUR NAME}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Introduction}
+A polytechnic institute stores student records on a central server and transfers files between two campuses. A security review found weak staff passwords, outdated software, unencrypted file transfers and guest network access to the records server, and repeated attempts to reach the server from an unfamiliar external address. This report assesses the risks, presents a Python toolkit for encryption and integrity checking, and documents the firewall rules applied in the authorised laboratory.
+
+\section{Risk Assessment}
+\subsection{Assets, vulnerabilities and consequences}
+\begin{longtable}{p{0.5cm}p{3.5cm}p{4cm}p{6cm}}
+\toprule
+\# & Asset & Vulnerability & Possible consequence \\ \midrule
+R1 & Staff accounts & Weak passwords & Password guessed; unauthorised reading or changing of records \\
+R2 & Student records server & Guest network can reach it & Data theft or attack from a guest device \\
+R3 & Files sent between campuses & Unencrypted transfers & Interception, reading or tampering \\
+\bottomrule
+\end{longtable}
+
+\subsection{Ranking}
+\begin{longtable}{p{1cm}p{3.5cm}p{1.8cm}p{1.5cm}p{5cm}}
+\toprule
+Rank & Risk & Likelihood & Impact & Reason \\ \midrule
+1 & R2 Guest access & High & High & Guests are already inside the network and external probing was observed; the server holds all records. \\
+2 & R1 Weak passwords & High & High & Easy to guess; a stolen account looks like a normal user. \\
+3 & R3 Unencrypted transfers & Medium & High & Attacker must be on the path, but all data is then readable. \\
+\bottomrule
+\end{longtable}
+
+\subsection{Recommended controls}
+R2: firewall rules that block the guest network and allow only authorised staff. R1: strong password policy with multi-factor authentication and account lockout. R3: encrypt files before transfer and verify integrity with SHA-256.
+
+\section{Encryption and Integrity Toolkit}
+The program \texttt{src/secure\_records.py} uses the Python \texttt{cryptography} library. Encryption uses Fernet, which combines AES-128 in CBC mode with an HMAC-SHA256 authentication tag, so a wrong key or a modified file is detected during decryption. The secret key is created by the \texttt{keygen} command and stored outside the repository (\texttt{\~{}/.exam\_keys/records.key}) with permissions 600.
+
+\begin{itemize}
+\item \textbf{encrypt}: reads a file, stores its SHA-256 hash as a baseline, and writes the encrypted output.
+\item \textbf{decrypt}: decrypts a file and, with \texttt{--original}, compares its hash to the original to confirm the contents match.
+\item \textbf{hash / check}: \texttt{hash} stores a SHA-256 baseline; \texttt{check} recalculates it and reports whether the file changed.
+\item \textbf{Error handling}: missing files, empty files, missing keys and wrong input produce a clear \texttt{ERROR} message instead of a crash.
+\end{itemize}
+
+\subsection{Test evidence}
+The output below was produced by \texttt{tests/run\_tests.sh}.
+\lstinputlisting{../tests/encryption_tests.txt}
+
+\section{Network Traffic Filtering}
+\subsection{Firewall rules}
+The rules use \texttt{iptables}. Order matters: the guest network is dropped first, then staff are allowed to the service, and finally all other inbound traffic to the service is dropped.
+\lstinputlisting[language=bash]{../firewall/firewall_rules.sh}
+
+\subsection{Test procedure and results}
+One permitted connection and two blocked connections were tested with \texttt{nc -zv -w 3 SERVER PORT} from a staff host, a guest host and a third host. The commands, expected outcomes and actual results are below.
+\lstinputlisting{../filter_tests.md}
+
+\section{Conclusion}
+The project assessed three main risks, protected files with authenticated encryption and SHA-256 integrity checking, and restricted access to the records server with firewall rules that block guests and unauthorised hosts while allowing staff. Limitations: the firewall protects only one service, and password and update weaknesses need policy changes and patching that were not implemented here. Further work: multi-factor authentication, automatic patching, encrypted transfer protocols such as SFTP or TLS, and central logging.
+
+GitHub repository: \url{https://github.com/YOUR-USERNAME/cryptography-network-security-exam}
+\end{document}
