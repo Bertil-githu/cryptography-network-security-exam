@@ -61,3 +61,8 @@ Missing files, empty files and wrong input give a clear ERROR message and do not
         bash firewall/test_connection.sh "Test 3: other host (blocked)" "Connection times out" SERVER_IP PORT
 
 Results are appended to filter_tests.md.
+
+## Virtual laboratory
+
+The firewall tests ran in a virtual laboratory (Linux network namespaces: server, staff, guest, other).
+Rebuild it with: sudo bash firewall/lab_setup.sh
